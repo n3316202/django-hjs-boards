@@ -190,20 +190,69 @@ class AggregateTestCase(TestCase):
         # 3. 전체 답변의 평균 길이 구하기
         # SELECT AVG(LENGTH(content)) AS avg_content_length FROM Answer;
         result = Answer.objects.aggregate(avg_content_length=Avg(Length("content")))
-        print(result)
+        # print(result)
 
         # 4. 가장 오래된 질문 날짜 구하기
         # SELECT MIN(create_date) AS oldest_question FROM Question;
         result = Question.objects.aggregate(oldest_question=Min("create_date"))
-        print(result)
+        # print(result)
 
         # 5. 전체 답변 글자 수 합계 구하기
         result = Answer.objects.aggregate(total_content_length=Sum(Length("content")))
-        print(result)
+        # print(result)
 
         # 6. 가장 긴 질문 길이 구하기
         result = Question.objects.aggregate(longest_question=Max(Length("content")))
-        print(result)
+        # print(result)
+
+    def test_raw(self):
+        from django.db import connection
+
+        questions = Question.objects.raw("SELECT * FROM pybo_question")
+        for question in questions:
+            print(question.id, question.subject)
+
+        # 2. 특정 질문 가져오기 (id=1)
+        # SELECT * FROM pybo_question WHERE id = 1;
+        question = Question.objects.raw(
+            "SELECT * FROM pybo_question WHERE id = %s", [1]
+        )
+        for q in question:
+            print(q.subject, q.content)
+        # 3. 특정 키워드가 포함된 질문 검색
+        keyword = "%Django%"
+        questions = Question.objects.raw(
+            "SELECT * FROM pybo_question WHERE content LIKE %s", [keyword]
+        )
+        for q in questions:
+            print(q.subject)
+
+        # 4. 답변이 가장 많은 질문 가져오기
+        questions = Question.objects.raw(
+            """
+            SELECT q.id, q.subject, COUNT(a.id) AS answer_count
+            FROM pybo_question q
+            LEFT JOIN pybo_answer a ON q.id = a.question_id
+            GROUP BY q.id
+            ORDER BY answer_count DESC
+            LIMIT 1
+        """
+        )
+        for q in questions:
+            print(q.subject, q.answer_count)
+
+        # 5. 질문 ID와 해당하는 답변 개수 가져오기
+
+        questions = Question.objects.raw(
+            """
+            SELECT q.id, q.subject, COUNT(a.id) AS num_answers
+            FROM pybo_question q
+            LEFT JOIN pybo_answer a ON q.id = a.question_id
+            GROUP BY q.id
+        """
+        )
+        for q in questions:
+            print(q.subject, q.num_answers)
 
 
 # def test_sum_answer_ids(self):
