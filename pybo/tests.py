@@ -56,93 +56,106 @@ class AggregateTestCase(TestCase):
             create_date=timezone.now(),
         )
 
-    # def test_count_answers(self):
+    # def test_value(self):
+    #     ## SQL 쿼리:
+    #     ## SELECT subject, content  FROM Answer;
+    #     ## 딕셔너리 형태로 반환
+    #     result = Question.objects.values("subject", "content")
+    #     result = Question.objects.all().values()  # 딕셔너리
+    #     result = Question.objects.all().values_list()  # 튜플
+
+    #     # 관련 테입즐 필드 조회(포오린키 조회)
+
+    #     # SELECT Answer.id, Question.subject, Answer.content
+    #     # FROM Answer
+    #     # JOIN Question ON Answer.question_id = Question.id;
+
+    #     #SELECT "pybo_answer"."id", "pybo_question"."subject", "pybo_answer"."content"
+    #     #FROM "pybo_answer" INNER JOIN "pybo_question" ON ("pybo_answer"."question_id" = "pybo_question"."id")
+
+    #     query_set = Answer.objects.values("id", "question__subject", "content")
+    #     print(query_set.query)
+
+    def test_filter(self):
+
+        # SELECT * FROM Question WHERE id = 1;
+
+        # 1. 특정 ID의 질문 조회
+        query = Question.objects.filter(id=1)
+        # print(query.query)
+
+        # 2. 특정 제목을 가진 질문 조회
+        # SELECT * FROM Question WHERE subject = 'Django란?';
+        query = Question.objects.filter(subject="Django란?")
+        # print(query)
+
+        # 3. 특정 내용이 포함된 질문 조회 (icontains)
+        # SELECT * FROM Question WHERE content LIKE '%Python%';
+        query = Question.objects.filter(content__icontains="Python").values()
+        # print(query)
+
+        # 4. 날짜 형 조회
+
+        # query = Question.objects.filter(create_date__gt=datetime(2024, 1, 1))
+        # print(query)
+
+        # 5. 숫자 필터링
+        # lt < 5 , lte <=5 , gt > 5,gte >=5
+        # SELECT * FROM Question WHERE id < 5;
+
+        query = Question.objects.filter(id__lt=5)  # id < 5
+        # print(query)
+
+        # 특정 ID 사이의 질문 조회 (between)
+        # SELECT * FROM Question WHERE id BETWEEN 1 AND 5;
+        query = Question.objects.filter(id__range=(1, 5))  # id < 5
+        # print(query)
+
+        # 2025년 1월 1일과 2025년 3월 14일 사이에 생성된 질문
+        query = Question.objects.filter(create_date__range=("2025-01-01", "2025-03-14"))
+        # print(query)
+
+        # 제목이 'Django란?'이고, 내용에 'MTV'가 포함된 질문
+        # SELECT * FROM Question WHERE subject = 'Django란?' AND content LIKE '%MTV%';
+        query = Question.objects.filter(
+            subject="Django란?", content__icontains="Django"
+        )  # dev_2
+        # print(query)
+
+        # 제목이 'Django란?'이거나 'Python이란?'인 질문 (OR 조건)
+        from django.db.models import Q
+
+        # SELECT * FROM Question WHERE subject = 'Django란?' OR subject = 'Python이란?';
+        query = Question.objects.filter(
+            Q(subject="Django란?") | Q(subject="Python이란?")
+        )  # dev_2
+        # print(query)
+
+        # 정렬
+        # SELECT * FROM Question ORDER BY create_date DESC LIMIT 2;
+        query = Question.objects.order_by("-id").values()[:2]
+        # print(query)
+
+        # null 처리
+        # query = Question.objects.filter(answer__isnull=True)
+        # print(query)
+
+        if Question.objects.filter(subject="Django란?").exists():
+            print("해당 질문이 존재합니다.")
+
+    # annotate @, aggregate
+    def test_annotate(self):
+        pass
+
+    def test_aggregate(self):
+        pass
+
+    # def test_sum_answer_ids(self):
     #     """
-    #     Test for Count aggregation on answers
+    #     Test for Sum aggregation on answer ids
     #     """
-    #     result = Answer.objects.aggregate(total_answers=Count("id"))
+    #     result = Answer.objects.aggregate(Sum("id"))
     #     # SQL 쿼리:
-    #     # SELECT COUNT(id) AS total_answers FROM Answer;
+    #     # SELECT SUM(id) FROM Answer;
     #     print(result)
-    #     self.assertEqual(result["total_answers"], 5)
-
-    def test_sum_answer_ids(self):
-        """
-        Test for Sum aggregation on answer ids
-        """
-        result = Answer.objects.aggregate(Sum("id"))
-        # SQL 쿼리:
-        # SELECT SUM(id) FROM Answer;
-        print(result)
-        self.assertEqual(result["id__sum"], 15)
-
-    def test_avg_answer_ids(self):
-        """
-        Test for Avg aggregation on answer ids
-        """
-        result = Answer.objects.aggregate(Avg("id"))
-        # SQL 쿼리:
-        # SELECT AVG(id) FROM Answer;
-        self.assertEqual(result["id__avg"], 3)
-
-    def test_min_answer_create_date(self):
-        """
-        Test for Min aggregation on the answer's create_date
-        """
-        query_set = Answer.objects.aggregate(Min("create_date"))
-        # SQL 쿼리:
-        # SELECT MIN(create_date) FROM Answer;
-        print("SQL Query:", Answer.objects.all().query)  # SQL 쿼리 출력
-
-        self.assertIsNotNone(query_set["create_date__min"])
-
-    def test_max_answer_create_date(self):
-        """
-        Test for Max aggregation on the answer's create_date
-        """
-        query_set = Answer.objects.aggregate(Max("create_date"))
-        # SQL 쿼리:
-        # SELECT MAX(create_date) FROM Answer;
-        print("SQL Query:", Answer.objects.all().query)  # SQL 쿼리 출력
-
-        self.assertIsNotNone(query_set["create_date__max"])
-
-    def test_aggregate_multiple_fields(self):
-        """
-        Test multiple aggregation functions together
-        """
-        result = Answer.objects.aggregate(
-            total_answers=Count("id"),
-            avg_answers=Avg("id"),
-            max_answer_time=Max("create_date"),
-        )
-        # SQL 쿼리:
-        # SELECT COUNT(id) AS total_answers, AVG(id) AS avg_answers, MAX(create_date) AS max_answer_time
-        # FROM Answer;
-        self.assertEqual(result["total_answers"], 5)
-        self.assertEqual(result["avg_answers"], 3)
-
-    def test_aggregate_on_question(self):
-        """
-        Test aggregate on Question model, such as counting answers per question
-        """
-        result = Question.objects.annotate(answer_count=Count("answer")).aggregate(
-            total_answers=Sum("answer_count")
-        )
-        # SQL 쿼리:
-        # SELECT SUM(answer_count) AS total_answers
-        # FROM (SELECT COUNT(answer.id) AS answer_count FROM Question
-        #       LEFT JOIN Answer ON Question.id = Answer.question_id
-        #       GROUP BY Question.id) AS subquery;
-        self.assertEqual(result["total_answers"], 5)
-
-    def test_avg_question_content_length(self):
-        """
-        Test for average length of question content
-        """
-        result = Question.objects.annotate(content_length=Length("content")).aggregate(
-            avg_content_length=Avg("content_length")
-        )
-        # SQL 쿼리:
-        # SELECT AVG(LENGTH(content)) AS avg_content_length FROM Question;
-        self.assertGreater(result["avg_content_length"], 0)
+    #     self.assertEqual(result["id__sum"], 15)
