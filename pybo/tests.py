@@ -7,6 +7,7 @@ from regex import F
 from pybo.models import Answer, Question
 from django.db.models import F
 
+
 class AggregateTestCase(TestCase):
 
     def setUp(self):
@@ -56,6 +57,16 @@ class AggregateTestCase(TestCase):
             content="Java는 많은 라이브러리와 도구를 지원합니다.",
             create_date=timezone.now(),
         )
+
+    def test_sum_answer_ids(self):
+        """
+        Test for Sum aggregation on answer ids
+        """
+        result = Answer.objects.aggregate(Sum("id"))
+        # SQL 쿼리:
+        # SELECT SUM(id) FROM Answer;
+        print(result)
+        self.assertEqual(result["id__sum"], 16) #AssertionError: 15 != 16
 
     def test_annotate(self):
         # 🎯 annotate() 정리
@@ -236,7 +247,7 @@ class AggregateTestCase(TestCase):
         )
         for q in questions:
             print(q.subject)
-            
+
         # 4. 답변이 가장 많은 질문 가져오기
         questions = Question.objects.raw(
             """
@@ -250,16 +261,3 @@ class AggregateTestCase(TestCase):
         )
         for q in questions:
             print(q.subject, q.answer_count)
-
-    def test_f(self):
-    # 각 질문에 대해 최신 답변 날짜를 question 테이블의 필드로 업데이트
-    # UPDATE question
-    # SET latest_answer_date = (SELECT MAX(a.create_date) 
-    #                           FROM answer a 
-    #                           WHERE a.question_id = question.id);
-    # F()를 사용하면 Python 메모리를 사용하지 않고, DB에서 직접 연산 수행
-    #✅ JOIN과 GROUP BY 없이도 데이터를 효율적으로 업데이트 가능
-        Question.objects.update(
-            latest_answer_date=F("answer__create_date")
-        )
-    
