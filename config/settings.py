@@ -52,10 +52,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "config.urls"
 
+#모든 앱이 공통으로 사용할 템플릿 디렉터리 - /templates
+#pybo 앱이 사용할 템플릿 디렉터리 - /templates/pybo
+#common 앱이 사용할 템플릿 디렉터리 - /templates/common
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
