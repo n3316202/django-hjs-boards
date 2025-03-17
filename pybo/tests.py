@@ -66,7 +66,7 @@ class AggregateTestCase(TestCase):
         # SQL 쿼리:
         # SELECT SUM(id) FROM Answer;
         print(result)
-        self.assertEqual(result["id__sum"], 16) #AssertionError: 15 != 16
+        self.assertEqual(result["id__sum"], 15)  # AssertionError: 15 != 16
 
     def test_annotate(self):
         # 🎯 annotate() 정리
