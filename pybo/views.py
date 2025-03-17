@@ -29,8 +29,15 @@ def detail(request, question_id):
 
 # dev_5
 def answer_create(request, question_id):
+    #answer/create/6/
     question = get_object_or_404(Question, pk=question_id)
+    
+    
     content = request.POST.get("content")
+    
+    #select * from qusertion , answer where answer.qusetin_id = 6
     question.answer_set.create(content=content, create_date=timezone.now())
 
+
+    
     return redirect("pybo:detail", question_id=question_id)
