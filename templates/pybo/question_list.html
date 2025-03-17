@@ -3,7 +3,7 @@
         {% for question in question_list  %}
             <li>
                 {% comment %} namesapce(네임 스페이스) {% endcomment %}
-                <a href="{% url 'pybo:detail'  question.id  %}">{{ question.subject }}</a>
+                {% comment %} <a href="{% url 'pybo:detail'  question.id  %}">{{ question.subject }}</a> {% endcomment %}
                 <a href="{% url 'pybo:detail'  question_id=question.id %}">{{ question.subject }}</a>
             </li>            
         {% endfor %}            

@@ -1,7 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from pybo.models import Question
+from django.utils import timezone
 
 # Create your views here.
 
@@ -20,3 +21,16 @@ def detail(request, question_id):
 
     context = {"question": question}
     return render(request, "pybo/question_detail.html", context)
+
+    # path(
+    #     "answer/create/<int:question_id>/", views.answer_create, name="answer_create"
+    # ),  # dev_5
+
+
+# dev_5
+def answer_create(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    content = request.POST.get("content")
+    question.answer_set.create(content=content, create_date=timezone.now())
+
+    return redirect("pybo:detail", question_id=question_id)
