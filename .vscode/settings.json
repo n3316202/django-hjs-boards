@@ -11,5 +11,5 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "monosans.djlint"
     },
-    "djlint.ignore": ["T032", "T001", "D018"]
+    "djlint.ignore": ["T032", "T001", "D018", "H030", "H031"]
 }
