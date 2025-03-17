@@ -1,3 +1,15 @@
+{% comment %} static 모듈을 메모리에 올리는것 {% endcomment %} 
+{% load static  %} 
+
+
+{% comment %} 
+STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+] 
+{% endcomment %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 <h1>
     {{question.subject}}    
 </h1>
