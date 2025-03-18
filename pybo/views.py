@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from pybo.forms import QuestionForm
 from pybo.models import Answer, Question
 from django.utils import timezone
 
@@ -29,16 +30,21 @@ def detail(request, question_id):
 
 # dev_5
 def answer_create(request, question_id):
-    #answer/create/6/
+    # answer/create/6/
     question = get_object_or_404(Question, pk=question_id)
-    
-    
+
     content = request.POST.get("content")
-    
-    #select * from qusertion , answer where answer.qusetin_id = 6
-    #question.answer_set.create(content=content, create_date=timezone.now())
-    
-    answer = Answer(question=question,content=content,create_date=timezone.now())
+
+    # select * from qusertion , answer where answer.qusetin_id = 6
+    # question.answer_set.create(content=content, create_date=timezone.now())
+
+    answer = Answer(question=question, content=content, create_date=timezone.now())
     answer.save()
-    
+
     return redirect("pybo:detail", question_id=question_id)
+
+
+# path("question/create/", views.question_create, name="question_create"),  # dev_9
+def question_create(request):
+    form = QuestionForm()
+    return render(request, "pybo/question_form.html", {"form": form})
