@@ -45,6 +45,24 @@ def answer_create(request, question_id):
 
 
 # path("question/create/", views.question_create, name="question_create"),  # dev_9
+
+# <textarea name="content" cols="40" rows="10" required="" id="id_content"></textarea>
+
+
 def question_create(request):
-    form = QuestionForm()
-    return render(request, "pybo/question_form.html", {"form": form})
+
+    print(request.POST.get("content"))
+
+    if request.method == "POST":
+
+        form = QuestionForm(request.POST)
+
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.create_date = timezone.now()
+            question.save()
+            return redirect("pybo:index")
+    else:
+
+        form = QuestionForm()
+        return render(request, "pybo/question_form.html", {"form": form})
