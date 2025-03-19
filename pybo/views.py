@@ -9,11 +9,13 @@ from django.core.paginator import Paginator
 # Create your views here.
 
 
-# http://127.0.0.1:8000/pybo/
+# http://127.0.0.1:8000/pybo
 def index(request):
-
+    #?page=4
     page = request.GET.get("page", "1")  # 페이지
+    
     question_list = Question.objects.order_by("-create_date")
+    
     paginator = Paginator(question_list, 10)  # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
     context = {"question_list": page_obj}
