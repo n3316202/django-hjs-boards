@@ -18,6 +18,8 @@
             <td>{{ forloop.counter }}</td>
             <td>
                 <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+                <!--dev_12-->
+                <span class="text-danger samll mx-2">{{ question.answer_set.count}}</span>
             </td>
             <td>{{ question.create_date }}</td>
         </tr>
