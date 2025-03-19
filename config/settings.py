@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "pybo",  # dev_2
+    "common",  # dev_13
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,7 @@ USE_TZ = True
 
 # http://127.0.0.1:8000/static/
 STATIC_URL = "static/"
-#D:\멋사\장고-프로젝트\django-hjs-boards\static
+# D:\멋사\장고-프로젝트\django-hjs-boards\static
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
