@@ -12,6 +12,9 @@ from django.core.paginator import Paginator
 
 # http://127.0.0.1:8000/pybo
 def index(request):
+
+    print(request.user)
+
     # ?page=4
     page = request.GET.get("page", "1")  # 페이지
 
