@@ -12,6 +12,8 @@ def logout_view(request):
 
 def signup(request):
 
+    print(request)
+
     if request.method == "POST":
         form = UserForm(request.POST)
 
@@ -26,6 +28,5 @@ def signup(request):
             return redirect("index")
     else:
         form = UserForm()
-    
-    return render(request,"common/signup.html",{'form':form})
 
+    return render(request, "common/signup.html", {"form": form})
