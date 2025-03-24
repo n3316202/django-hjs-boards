@@ -113,5 +113,5 @@ def question_modify(request, question_id):
     else:
         form = QuestionForm(instance=question)
 
-    context = {"form", form}
+    context = {"form": form}
     return render(request, "pybo/question_form.html", context)
