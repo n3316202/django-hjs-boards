@@ -4,8 +4,6 @@ from django.urls import include, path
 from pybo.views import base_views, question_views, answer_views
 
 
-
-
 app_name = "pybo"
 
 ## http://127.0.0.1:8000/pybo/5/
