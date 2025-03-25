@@ -48,8 +48,14 @@
                         {{ answer.create_date }}
                     </div>
                 </div>
-
             </div>
+            <!--dev_18-->
+            <div class="my-3">                
+                {% if request.user == answer.author %}
+                    <a href=" {% url 'pybo:answer_modify' answer.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+                {% endif %}     
+           </div>
+
         </div>
     </div>
     {% endfor %}
