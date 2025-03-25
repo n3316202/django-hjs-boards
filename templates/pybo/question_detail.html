@@ -30,13 +30,8 @@
                 {% if request.user == question.author %}
                     <a class="btn btn-sm btn-outline-secondary" href="{% url 'pybo:question_modify' question.id %}">수정</a>    
                     <a class="delete btn btn-sm btn-outline-secondary" href="javascript:void(0)" data-uri="{% url 'pybo:question_delete' question_id  %}" >삭제</a>  
-                {% endif %}   
-                
-
-                
+                {% endif %}                
             </div>
-
-
         </div>
     </div>
     <!-- 답변 -->
