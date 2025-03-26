@@ -25,6 +25,18 @@ class Question(models.Model):
 
     def __str__(self):
         return self.subject
+    
+
+# class    QuestionVoter:
+#     voter =  models.ForeignKey(
+#         User, on_delete=models.CASCADE, related_name="author_question"
+#     ) 
+#     question =  models.ForeignKey(
+#         Question , on_delete=models.CASCADE, related_name="author_question"
+#     ) 
+#     modify_date = models.DateField(null=True, blank=True)  
+   
+    
 
 
 class Answer(models.Model):
