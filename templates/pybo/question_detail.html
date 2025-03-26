@@ -136,14 +136,15 @@
         });
     });
     
-    //dev_19
-    const recommand_elements = document.getElementsByClassName("recommend");
+    
+    const recommand_elements = document.getElementsByClassName("recommend");    
     Array.from(recommand_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
+            element.addEventListener('click', function() {
             if(confirm("정말로 추전하시겠습니까?")) {
                 location.href = this.dataset.uri;
             };
         });
     });
+
 </script>
 {% endblock script %}   
