@@ -15,14 +15,17 @@ from django.db.models import Q
 # dev_20 검색 추가
 def index(request):
 
-    # ?page=4
+    # ?kw=홍길동&page=1
     page = request.GET.get("page", "1")  # 페이지
     kw = request.GET.get("kw", "")  # 검색어
 
+    #select * from question , user where ~~~;
     question_list = Question.objects.order_by("-create_date")
 
+  
     # dev_20
     if kw:
+        #select disctict * from question,user where subject like "%홍길동%" or
         question_list = question_list.filter(
             Q(subject__icontains=kw)  # 제목검색
             | Q(content__icontains=kw)  # 내용 검색
