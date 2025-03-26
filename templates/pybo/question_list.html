@@ -96,7 +96,7 @@
 </div>
 <!--dev_20 page와 kw를 동시에 GET으로 요청할 수 있는 searchForm을 추가-->
 <form id="searchForm" method="get" action="{% url 'index' %}">
-    <input type="hidden" id="kw" name="kw" value="{{ kw|defualt_if_none:''}}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:''}}">
     <input type="hidden" id="page" name="page" value="{{page}}">
 </form>
 {% endblock content %}
