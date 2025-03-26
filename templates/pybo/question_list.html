@@ -3,6 +3,9 @@
 
 {% block content %}    
 <div class="container my-3">
+
+    <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
+
     <table class="table">
         <thead>
         <tr class="text-center table-dark">
@@ -73,6 +76,8 @@
         {% endif %}  
     <!-- 페이징처리 끝 -->        
     </ul>
-    <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
+
+    
+
 </div>
 {% endblock content %}
