@@ -44,4 +44,9 @@ urlpatterns = [
         question_views.question_vote,
         name="question_vote",
     ),  # dev_19
+    path(
+        "answer/vote/<int:answer_id>/",
+        answer_views.answer_vote,
+        name="answer_vote",
+    ),  # dev_19 답변 추천
 ]
