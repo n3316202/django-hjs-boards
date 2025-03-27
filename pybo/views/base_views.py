@@ -24,7 +24,7 @@ def index(request):
 
     # dev_20
     if kw:
-        # select disctict * from question,user where subject like "%홍길동%" or
+        # select disctict * from question,user where subject like "%홍길동%"
         question_list = question_list.filter(
             Q(subject__icontains=kw)  # 제목검색
             | Q(content__icontains=kw)  # 내용 검색
@@ -39,6 +39,7 @@ def index(request):
     # dev_20 수정
     context = {"question_list": page_obj, "page": page, "kw": kw}
 
+    # 리액트와 차이 = 다시 그린다.(클라이언트 입장) =  httpRespose 객체로 만든후에 html 태그를 클라이언트한테 보낸다.
     return render(request, "pybo/question_list.html", context)
 
 
